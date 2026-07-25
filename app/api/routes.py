@@ -1,4 +1,5 @@
 import logging
+from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
@@ -14,13 +15,13 @@ router = APIRouter()
 
 @router.post("/sign", summary="Sign a PDF")
 async def sign(
-    pdf: UploadFile = File(...),
-    signature: UploadFile = File(...),
-    x: int = Form(...),
-    y: int = Form(...),
-    width: int = Form(...),
-    height: int = Form(...),
-    page: int = Form(0),
+    pdf: Annotated[UploadFile, File()],
+    signature: Annotated[UploadFile, File()],
+    x: Annotated[int, Form()],
+    y: Annotated[int, Form()],
+    width: Annotated[int, Form()],
+    height: Annotated[int, Form()],
+    page: Annotated[int, Form()] = 0,
 ):
     if pdf.content_type != "application/pdf":
         raise HTTPException(
